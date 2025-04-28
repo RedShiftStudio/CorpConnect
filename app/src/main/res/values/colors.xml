@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <!-- Основные цвета -->
+    <color name="main_color">#073865</color> <!-- Темно-синий для заголовков и кнопок -->
+    <color name="accent_color">#FF9800</color> <!-- Оранжевый акцент -->
+    <color name="background_color">#F5F5F5</color> <!-- Светло-серый фон -->
+    <color name="text_primary">#FF000000</color> <!-- Основной текст (черный) -->
+    <color name="text_secondary">#88000000</color> <!-- Второстепенный текст (серая прозрачность) -->
+    <color name="text_button">#ffff</color> <!-- Текст для кнопок -->
+
+    <!-- Дополнительные цвета -->
+    <color name="error_color">#D32F2F</color> <!-- Красный для ошибок -->
+    <color name="success_color">#4CAF50</color> <!-- Зеленый для успешных действий -->
+    <color name="divider_color">#E0E0E0</color> <!-- Линии и разделители -->
 </resources>

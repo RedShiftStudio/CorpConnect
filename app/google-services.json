@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1071896250816",
+    "project_id": "corpconnect-fdf1b",
+    "storage_bucket": "corpconnect-fdf1b.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1071896250816:android:a07fc6efd94e3d659ee025",
+        "android_client_info": {
+          "package_name": "com.company.corpconnect"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD4-VgMkgRDs3adFlLKdWiCc8UatFCE0z4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -18,6 +18,8 @@ navigationUi = "2.8.9"
 retrofit = "2.11.0"
 roomCompiler = "2.7.1"
 roomRuntime = "2.7.1"
+googleGmsGoogleServices = "4.4.2"
+firebaseAuth = "23.2.0"
 
 [libraries]
 compiler = { module = "com.github.bumptech.glide:compiler", version.ref = "compiler" }
@@ -40,7 +42,9 @@ navigation-ui = { module = "androidx.navigation:navigation-ui", version.ref = "n
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomCompiler" }
 room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomRuntime" }
+firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version.ref = "firebaseAuth" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
+google-gms-google-services = { id = "com.google.gms.google-services", version.ref = "googleGmsGoogleServices" }
 
