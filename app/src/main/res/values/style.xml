@@ -16,6 +16,10 @@
         <item name="android:navigationBarColor">@color/main_color</item>
     </style>
 
+    <style name="BottomNavNoFocus" parent="Widget.Design.BottomNavigationView">
+        <item name="android:focusable">false</item>
+        <item name="android:focusableInTouchMode">false</item>
+    </style>
 
     <style name="ButtonStyle">
         <item name="android:layout_width">match_parent</item>

@@ -11,12 +11,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.company.corpconnect.R;
 import com.company.corpconnect.ui.login.LoginActivity;
 
+
 @SuppressLint("CustomSplashScreen")
 public class SplashActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activty_splash);
+        setContentView(R.layout.activity_splash);
 
         new Handler().postDelayed(()->{
             startActivity(new Intent(SplashActivity.this, LoginActivity.class));
