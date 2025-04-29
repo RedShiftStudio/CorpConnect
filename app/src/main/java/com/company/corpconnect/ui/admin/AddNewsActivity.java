@@ -1,6 +1,5 @@
 package com.company.corpconnect.ui.admin;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -8,24 +7,17 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.company.corpconnect.R;
 import com.company.corpconnect.model.News;
-import com.company.corpconnect.ui.account.AccountActivity;
-import com.company.corpconnect.ui.account.NotificationsActivity;
 import com.company.corpconnect.ui.home.HomeActivity;
-import com.company.corpconnect.ui.interaction.ChatsActivity;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -35,11 +27,10 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-import java.util.Objects;
 
 public class AddNewsActivity extends AppCompatActivity {
 
-    private TextInputEditText titleEditText, descriptionEditText, authorEditText;
+    private EditText etTitle, etDescription, etAuthor;
     private ImageView ivImagePreview;
     private Uri imageUri;
     private DatabaseReference newsRef;
@@ -49,9 +40,9 @@ public class AddNewsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_news);
 
-        titleEditText = findViewById(R.id.titleEditText);
-        descriptionEditText = findViewById(R.id.descriptionEditText);
-        authorEditText = findViewById(R.id.authorEditText);
+        etTitle = findViewById(R.id.etTitle);
+        etDescription = findViewById(R.id.etDescription);
+        etAuthor = findViewById(R.id.etAuthor);
         ivImagePreview = findViewById(R.id.ivImagePreview);
         Button btnAddNews = findViewById(R.id.btnAddNews);
         Button btnChooseImage = findViewById(R.id.btnChooseImage);
@@ -61,29 +52,6 @@ public class AddNewsActivity extends AppCompatActivity {
 
         btnChooseImage.setOnClickListener(v -> openFileChooser());
         btnAddNews.setOnClickListener(v -> addNews());
-
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
-        bottomNavigationView.setOnItemSelectedListener(new BottomNavigationView.OnItemSelectedListener() {
-            @SuppressLint("NonConstantResourceId")
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                int itemId = item.getItemId();
-                if (itemId == R.id.home) {
-                    startActivity(new Intent(AddNewsActivity.this, HomeActivity.class));
-                    return true;
-                } else if (itemId == R.id.notification) {
-                    startActivity(new Intent(AddNewsActivity.this, NotificationsActivity.class));
-                    return true;
-                } else if (itemId == R.id.message) {
-                    startActivity(new Intent(AddNewsActivity.this, ChatsActivity.class));
-                    return true;
-                } else if (itemId == R.id.account) {
-                    startActivity(new Intent(AddNewsActivity.this, AccountActivity.class));
-                    return true;
-                }
-                return false;
-            }
-        });
     }
 
     private void openFileChooser() {
@@ -135,9 +103,9 @@ public class AddNewsActivity extends AppCompatActivity {
     }
 
     private void addNews() {
-        String title = Objects.requireNonNull(titleEditText.getText()).toString().trim();
-        String description = Objects.requireNonNull(descriptionEditText.getText()).toString().trim();
-        String author = Objects.requireNonNull(authorEditText.getText()).toString().trim();
+        String title = etTitle.getText().toString().trim();
+        String description = etDescription.getText().toString().trim();
+        String author = etAuthor.getText().toString().trim();
 
         if (TextUtils.isEmpty(title) || TextUtils.isEmpty(description) || TextUtils.isEmpty(author)) {
             Toast.makeText(this, "Пожалуйста, заполните все поля", Toast.LENGTH_SHORT).show();

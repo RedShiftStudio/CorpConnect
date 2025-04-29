@@ -1,8 +1,6 @@
 package com.company.corpconnect.model;
 
-import java.io.Serializable;
-
-public class News implements Serializable {
+public class News {
     private String id;
     private String title;
     private String description;

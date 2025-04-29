@@ -22,7 +22,7 @@ import java.util.Objects;
 
 
 public class RegisterActivity extends AppCompatActivity {
-    private TextInputEditText emailEditText, passwordEditText, nameEditText, positionEditText;
+    private TextInputEditText emailEditText, passwordEditText, nameEditText;
     private FirebaseAuth mAuth;
     private DatabaseReference databaseReference;
 
@@ -33,8 +33,6 @@ public class RegisterActivity extends AppCompatActivity {
 
         nameEditText = findViewById(R.id.nameEditText);
         emailEditText = findViewById(R.id.emailEditText);
-        positionEditText = findViewById(R.id.positionEditText);
-
         passwordEditText = findViewById(R.id.passwordEditText);
         Button registerButton = findViewById(R.id.registerButton);
         TextView loginLink = findViewById(R.id.loginLink);
@@ -45,9 +43,8 @@ public class RegisterActivity extends AppCompatActivity {
         registerButton.setOnClickListener(v -> {
             String email = Objects.requireNonNull(emailEditText.getText()).toString().trim();
             String password = Objects.requireNonNull(passwordEditText.getText()).toString().trim();
-            String position = Objects.requireNonNull(positionEditText.getText()).toString().trim();
 
-            if (email.isEmpty() || password.isEmpty() || position.isEmpty()) {
+            if (email.isEmpty() || password.isEmpty()) {
                 Toast.makeText(this, "Заполните все поля", Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -64,7 +61,7 @@ public class RegisterActivity extends AppCompatActivity {
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
                             String userId = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
-                            saveUserToDatabase(userId, email, Objects.requireNonNull(nameEditText.getText()).toString().trim(), "user", position);
+                            saveUserToDatabase(userId, email, Objects.requireNonNull(nameEditText.getText()).toString().trim(), "user");
                         } else {
                             String error = task.getException() != null ? task.getException().getMessage() : "Неизвестная ошибка";
                             Toast.makeText(this, "Ошибка: " + error, Toast.LENGTH_LONG).show();
@@ -78,13 +75,13 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
-    private void saveUserToDatabase(String userId, String email, String name, String role, String position) {
+    private void saveUserToDatabase(String userId, String email, String name, String role) {
         if (name.isEmpty()) {
             Toast.makeText(this, "Введите имя", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        User user = new User(email, name, role, position);
+        User user = new User(email, name, role);
         databaseReference.child(userId).setValue(user).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 Toast.makeText(this, "Регистрация успешна", Toast.LENGTH_SHORT).show();
