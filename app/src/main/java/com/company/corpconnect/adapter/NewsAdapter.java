@@ -1,6 +1,8 @@
 package com.company.corpconnect.adapter;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,15 +15,18 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.company.corpconnect.R;
 import com.company.corpconnect.model.News;
+import com.company.corpconnect.ui.home.NewsDetailActivity;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder> {
     private List<News> newsList;
+    private Context context;
 
-    public NewsAdapter(List<News> newsList) {
+    public NewsAdapter(List<News> newsList, Context context) {
         this.newsList = newsList;
+        this.context = context;
     }
 
     @NonNull
@@ -44,6 +49,12 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.NewsViewHolder
                 .placeholder(R.drawable.placeholder_image)
                 .error(R.drawable.ic_app)
                 .into(holder.newsImage);
+
+        holder.itemView.setOnClickListener(v -> {
+            Intent intent = new Intent(context, NewsDetailActivity.class);
+            intent.putExtra("news", news);
+            context.startActivity(intent);
+        });
     }
 
     @Override

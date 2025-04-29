@@ -22,7 +22,7 @@ import java.util.Objects;
 
 
 public class RegisterActivity extends AppCompatActivity {
-    private TextInputEditText emailEditText, passwordEditText, nameEditText;
+    private TextInputEditText emailEditText, passwordEditText, nameEditText, surnameEditText, departmentEditText, positionEditText;
     private FirebaseAuth mAuth;
     private DatabaseReference databaseReference;
 
@@ -32,7 +32,12 @@ public class RegisterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_registration);
 
         nameEditText = findViewById(R.id.nameEditText);
+        surnameEditText = findViewById(R.id.surnameEditText);
+
         emailEditText = findViewById(R.id.emailEditText);
+        positionEditText = findViewById(R.id.positionEditText);
+        departmentEditText = findViewById(R.id.departmentEditText);
+
         passwordEditText = findViewById(R.id.passwordEditText);
         Button registerButton = findViewById(R.id.registerButton);
         TextView loginLink = findViewById(R.id.loginLink);
@@ -41,10 +46,25 @@ public class RegisterActivity extends AppCompatActivity {
         FirebaseDatabase database = FirebaseDatabase.getInstance("https://corpconnect-fdf1b-default-rtdb.europe-west1.firebasedatabase.app");
         databaseReference = database.getReference("users");
         registerButton.setOnClickListener(v -> {
+            String name = Objects.requireNonNull(nameEditText.getText()).toString().trim();
+            String surname = Objects.requireNonNull(surnameEditText.getText()).toString().trim();
+
             String email = Objects.requireNonNull(emailEditText.getText()).toString().trim();
             String password = Objects.requireNonNull(passwordEditText.getText()).toString().trim();
+            String position = Objects.requireNonNull(positionEditText.getText()).toString().trim();
+            String department = Objects.requireNonNull(departmentEditText.getText()).toString().trim();
 
-            if (email.isEmpty() || password.isEmpty()) {
+            if (name.isEmpty()) {
+                Toast.makeText(this, "Введите имя", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (surname.isEmpty()) {
+                Toast.makeText(this, "Введите фамилию", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (email.isEmpty() || password.isEmpty() || position.isEmpty() || department.isEmpty()) {
                 Toast.makeText(this, "Заполните все поля", Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -61,7 +81,7 @@ public class RegisterActivity extends AppCompatActivity {
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
                             String userId = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
-                            saveUserToDatabase(userId, email, Objects.requireNonNull(nameEditText.getText()).toString().trim(), "user");
+                            saveUserToDatabase(userId, email, name, "user", position, surname, department);
                         } else {
                             String error = task.getException() != null ? task.getException().getMessage() : "Неизвестная ошибка";
                             Toast.makeText(this, "Ошибка: " + error, Toast.LENGTH_LONG).show();
@@ -75,13 +95,9 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
-    private void saveUserToDatabase(String userId, String email, String name, String role) {
-        if (name.isEmpty()) {
-            Toast.makeText(this, "Введите имя", Toast.LENGTH_SHORT).show();
-            return;
-        }
+    private void saveUserToDatabase(String userId, String email, String name, String role, String position, String surname, String department) {
 
-        User user = new User(email, name, role);
+        User user = new User(email, name, surname, role, position, department);
         databaseReference.child(userId).setValue(user).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 Toast.makeText(this, "Регистрация успешна", Toast.LENGTH_SHORT).show();
