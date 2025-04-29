@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
+import android.view.MenuItem;
 import android.widget.Button;
 import androidx.appcompat.widget.SearchView;
 
@@ -19,7 +20,11 @@ import com.company.corpconnect.R;
 import com.company.corpconnect.adapter.ImageBannerAdapter;
 import com.company.corpconnect.adapter.NewsAdapter;
 import com.company.corpconnect.model.News;
+import com.company.corpconnect.ui.account.AccountActivity;
+import com.company.corpconnect.ui.account.NotificationsActivity;
 import com.company.corpconnect.ui.admin.AddNewsActivity;
+import com.company.corpconnect.ui.interaction.ChatsActivity;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -50,7 +55,7 @@ public class HomeActivity extends AppCompatActivity {
         setupBanner();
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        newsAdapter = new NewsAdapter(newsList);
+        newsAdapter = new NewsAdapter(newsList, this);
         recyclerView.setAdapter(newsAdapter);
 
         FirebaseDatabase database = FirebaseDatabase.getInstance("https://corpconnect-fdf1b-default-rtdb.europe-west1.firebasedatabase.app");
@@ -73,6 +78,28 @@ public class HomeActivity extends AppCompatActivity {
         fabAddNews.setOnClickListener(v -> {
             startActivity(new Intent(HomeActivity.this, AddNewsActivity.class));
         });
+
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
+        bottomNavigationView.setOnItemSelectedListener(new BottomNavigationView.OnItemSelectedListener() {
+            @SuppressLint("NonConstantResourceId")
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                int itemId = item.getItemId();
+                if (itemId == R.id.home) {
+                    return true;
+                } else if (itemId == R.id.notification) {
+                    startActivity(new Intent(HomeActivity.this, NotificationsActivity.class));
+                    return true;
+                } else if (itemId == R.id.message) {
+                    startActivity(new Intent(HomeActivity.this, ChatsActivity.class));
+                    return true;
+                } else if (itemId == R.id.account) {
+                    startActivity(new Intent(HomeActivity.this, AccountActivity.class));
+                    return true;
+                }
+                return false;
+            }
+        });
     }
     private void loadNews() {
         newsRef.addValueEventListener(new ValueEventListener() {
@@ -89,7 +116,6 @@ public class HomeActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                // Обработка ошибок
             }
         });
     }
@@ -107,7 +133,7 @@ public class HomeActivity extends AppCompatActivity {
     private void setupBanner() {
         ViewPager2 imageBanner = findViewById(R.id.imageBanner);
         List<Integer> images = Arrays.asList(
-                R.drawable.banner_image1, // замените на ваши изображения
+                R.drawable.banner_image1,
                 R.drawable.banner_image2,
                 R.drawable.banner_image3
         );
@@ -115,14 +141,10 @@ public class HomeActivity extends AppCompatActivity {
         ImageBannerAdapter adapter = new ImageBannerAdapter(this, images);
         imageBanner.setAdapter(adapter);
 
-        // Автоматическая прокрутка
-        Runnable bannerRunnable = new Runnable() {
-            @Override
-            public void run() {
-                int currentItem = imageBanner.getCurrentItem();
-                int nextItem = currentItem + 1 >= images.size() ? 0 : currentItem + 1;
-                imageBanner.setCurrentItem(nextItem, true);
-            }
+        Runnable bannerRunnable = () -> {
+            int currentItem = imageBanner.getCurrentItem();
+            int nextItem = currentItem + 1 >= images.size() ? 0 : currentItem + 1;
+            imageBanner.setCurrentItem(nextItem, true);
         };
 
         Handler bannerHandler = new Handler();
@@ -131,7 +153,7 @@ public class HomeActivity extends AppCompatActivity {
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
                 bannerHandler.removeCallbacks(bannerRunnable);
-                bannerHandler.postDelayed(bannerRunnable, 3000); // каждые 3 секунды
+                bannerHandler.postDelayed(bannerRunnable, 3000);
             }
         });
     }

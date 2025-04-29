@@ -35,6 +35,18 @@
         <activity
             android:name=".ui.admin.AddNewsActivity"
             android:exported="true" />
+        <activity
+            android:name=".ui.interaction.ChatsActivity"
+            android:exported="true" />
+        <activity
+            android:name=".ui.account.AccountActivity"
+            android:exported="true" />
+        <activity
+            android:name=".ui.account.NotificationsActivity"
+            android:exported="true" />
+        <activity
+            android:name=".ui.home.NewsDetailActivity"
+            android:exported="true" />
     </application>
 
 </manifest>
