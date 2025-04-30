@@ -39,7 +39,7 @@ public class NewsDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news_detail);
 
-        FirebaseDatabase database = FirebaseDatabase.getInstance("https://corpconnect-fdf1b-default-rtdb.europe-west1.firebasedatabase.app");
+        FirebaseDatabase database = FirebaseDatabase.getInstance(HomeActivity.linkDatabase);
         userDatabaseRef = database.getReference("users");
 
         ImageView newsImageDetail = findViewById(R.id.newsImageDetail);
@@ -95,7 +95,7 @@ public class NewsDetailActivity extends AppCompatActivity {
     }
 
     private void deleteNews(String newsId) {
-        DatabaseReference newsRef = FirebaseDatabase.getInstance("https://corpconnect-fdf1b-default-rtdb.europe-west1.firebasedatabase.app")
+        DatabaseReference newsRef = FirebaseDatabase.getInstance(HomeActivity.linkDatabase)
                 .getReference("news")
                 .child(newsId);
 

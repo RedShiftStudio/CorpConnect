@@ -41,7 +41,7 @@ public class LoginActivity extends AppCompatActivity {
         TextView forgotPasswordLink = findViewById(R.id.forgotPasswordLink);
 
         mAuth = FirebaseAuth.getInstance();
-        FirebaseDatabase database = FirebaseDatabase.getInstance("https://corpconnect-fdf1b-default-rtdb.europe-west1.firebasedatabase.app");
+        FirebaseDatabase database = FirebaseDatabase.getInstance(HomeActivity.linkDatabase);
         databaseReference = database.getReference("users");
 
         loginButton.setOnClickListener(v -> {

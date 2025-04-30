@@ -19,6 +19,7 @@ import com.company.corpconnect.R;
 import com.company.corpconnect.adapter.ChatAdapter;
 import com.company.corpconnect.model.Message;
 import com.company.corpconnect.model.Notification;
+import com.company.corpconnect.ui.home.HomeActivity;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -73,7 +74,7 @@ public class ChatActivity extends AppCompatActivity {
             fetchUserName(currentUserId);
         }
 
-        FirebaseDatabase database = FirebaseDatabase.getInstance("https://corpconnect-fdf1b-default-rtdb.europe-west1.firebasedatabase.app");
+        FirebaseDatabase database = FirebaseDatabase.getInstance(HomeActivity.linkDatabase);
         chatDatabaseRef = database.getReference("chats").child(chatId);
 
         chatAdapter = new ChatAdapter(messagesList, currentUserId);
@@ -131,7 +132,7 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void sendMessage(String chatId, String text) {
-        DatabaseReference messagesRef = FirebaseDatabase.getInstance("https://corpconnect-fdf1b-default-rtdb.europe-west1.firebasedatabase.app")
+        DatabaseReference messagesRef = FirebaseDatabase.getInstance(HomeActivity.linkDatabase)
                 .getReference("chats")
                 .child(chatId)
                 .child("messages");
@@ -155,7 +156,7 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void sendNotification(String chatId, String messageText) {
-        DatabaseReference chatMetadataRef = FirebaseDatabase.getInstance("https://corpconnect-fdf1b-default-rtdb.europe-west1.firebasedatabase.app")
+        DatabaseReference chatMetadataRef = FirebaseDatabase.getInstance(HomeActivity.linkDatabase)
                 .getReference("chats")
                 .child(chatId)
                 .child("metadata");
@@ -169,7 +170,7 @@ public class ChatActivity extends AppCompatActivity {
                 }
 
                 if (otherUserId != null) {
-                    DatabaseReference notificationsRef = FirebaseDatabase.getInstance("https://corpconnect-fdf1b-default-rtdb.europe-west1.firebasedatabase.app")
+                    DatabaseReference notificationsRef = FirebaseDatabase.getInstance(HomeActivity.linkDatabase)
                             .getReference("users")
                             .child(otherUserId)
                             .child("notifications");
@@ -191,7 +192,7 @@ public class ChatActivity extends AppCompatActivity {
 
 
     private void updateChatMetadata(String chatId, String lastMessage) {
-        DatabaseReference chatMetadataRef = FirebaseDatabase.getInstance("https://corpconnect-fdf1b-default-rtdb.europe-west1.firebasedatabase.app")
+        DatabaseReference chatMetadataRef = FirebaseDatabase.getInstance(HomeActivity.linkDatabase)
                 .getReference("chats")
                 .child(chatId)
                 .child("metadata");
@@ -201,7 +202,7 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void fetchUserName(String userId) {
-        DatabaseReference usersRef = FirebaseDatabase.getInstance("https://corpconnect-fdf1b-default-rtdb.europe-west1.firebasedatabase.app")
+        DatabaseReference usersRef = FirebaseDatabase.getInstance(HomeActivity.linkDatabase)
                 .getReference("users")
                 .child(userId);
 
@@ -230,7 +231,7 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void listenForNotifications() {
-        DatabaseReference notificationsRef = FirebaseDatabase.getInstance("https://corpconnect-fdf1b-default-rtdb.europe-west1.firebasedatabase.app")
+        DatabaseReference notificationsRef = FirebaseDatabase.getInstance(HomeActivity.linkDatabase)
                 .getReference("users")
                 .child(currentUserId)
                 .child("notifications");

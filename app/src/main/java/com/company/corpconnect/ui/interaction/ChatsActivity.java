@@ -60,7 +60,7 @@ public class ChatsActivity extends AppCompatActivity {
         recyclerView.setAdapter(usersAdapter);
 
         currentUserId = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
-        FirebaseDatabase database = FirebaseDatabase.getInstance("https://corpconnect-fdf1b-default-rtdb.europe-west1.firebasedatabase.app");
+        FirebaseDatabase database = FirebaseDatabase.getInstance(HomeActivity.linkDatabase);
         usersRef = database.getReference("users");
 
         setupSearchView();

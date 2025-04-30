@@ -11,6 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.company.corpconnect.R;
+import com.company.corpconnect.ui.home.HomeActivity;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -39,7 +40,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
         Button saveProfileButton = findViewById(R.id.saveProfileButton);
 
-        FirebaseDatabase database = FirebaseDatabase.getInstance("https://corpconnect-fdf1b-default-rtdb.europe-west1.firebasedatabase.app");
+        FirebaseDatabase database = FirebaseDatabase.getInstance(HomeActivity.linkDatabase);
         userDatabaseRef = database.getReference("users");
 
         loadUserData();

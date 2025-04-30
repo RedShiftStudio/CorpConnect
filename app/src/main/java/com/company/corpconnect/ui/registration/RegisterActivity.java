@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.company.corpconnect.R;
 import com.company.corpconnect.model.User;
+import com.company.corpconnect.ui.home.HomeActivity;
 import com.company.corpconnect.ui.login.LoginActivity;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
@@ -43,7 +44,7 @@ public class RegisterActivity extends AppCompatActivity {
         TextView loginLink = findViewById(R.id.loginLink);
 
         mAuth = FirebaseAuth.getInstance();
-        FirebaseDatabase database = FirebaseDatabase.getInstance("https://corpconnect-fdf1b-default-rtdb.europe-west1.firebasedatabase.app");
+        FirebaseDatabase database = FirebaseDatabase.getInstance(HomeActivity.linkDatabase);
         databaseReference = database.getReference("users");
         registerButton.setOnClickListener(v -> {
             String name = Objects.requireNonNull(nameEditText.getText()).toString().trim();

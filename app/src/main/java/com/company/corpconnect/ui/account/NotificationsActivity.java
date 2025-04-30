@@ -78,9 +78,7 @@ public class NotificationsActivity extends AppCompatActivity {
     }
 
     private void loadNotificationsFromFirebase() {
-        DatabaseReference notificationRef = FirebaseDatabase.getInstance(
-                "https://corpconnect-fdf1b-default-rtdb.europe-west1.firebasedatabase.app"
-        ).getReference("notifications");
+        DatabaseReference notificationRef = FirebaseDatabase.getInstance(HomeActivity.linkDatabase).getReference("notifications");
 
         notificationRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -114,9 +112,7 @@ public class NotificationsActivity extends AppCompatActivity {
 
     @SuppressLint("NotifyDataSetChanged")
     private void markAllNotificationsAsRead() {
-        DatabaseReference notificationRef = FirebaseDatabase.getInstance(
-                "https://corpconnect-fdf1b-default-rtdb.europe-west1.firebasedatabase.app"
-        ).getReference("notifications");
+        DatabaseReference notificationRef = FirebaseDatabase.getInstance(HomeActivity.linkDatabase).getReference("notifications");
 
         Map<String, Object> updates = new HashMap<>();
         for (Notification notification : notifications) {

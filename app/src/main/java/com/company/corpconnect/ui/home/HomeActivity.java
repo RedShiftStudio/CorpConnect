@@ -42,6 +42,7 @@ public class HomeActivity extends AppCompatActivity {
     private List<News> newsList = new ArrayList<>();
     private DatabaseReference newsRef;
 
+    public static String linkDatabase = "https://corpconnect-fdf1b-default-rtdb.europe-west1.firebasedatabase.app";
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,7 +57,7 @@ public class HomeActivity extends AppCompatActivity {
         newsAdapter = new NewsAdapter(newsList, this);
         recyclerView.setAdapter(newsAdapter);
 
-        FirebaseDatabase database = FirebaseDatabase.getInstance("https://corpconnect-fdf1b-default-rtdb.europe-west1.firebasedatabase.app");
+        FirebaseDatabase database = FirebaseDatabase.getInstance(linkDatabase);
         newsRef = database.getReference("news");
         loadNews();
 

@@ -56,7 +56,7 @@ public class AddNewsActivity extends AppCompatActivity {
         Button btnAddNews = findViewById(R.id.btnAddNews);
         Button btnChooseImage = findViewById(R.id.btnChooseImage);
 
-        FirebaseDatabase database = FirebaseDatabase.getInstance("https://corpconnect-fdf1b-default-rtdb.europe-west1.firebasedatabase.app");
+        FirebaseDatabase database = FirebaseDatabase.getInstance(HomeActivity.linkDatabase);
         newsRef = database.getReference("news");
         notificationsRef = database.getReference("notifications");
 

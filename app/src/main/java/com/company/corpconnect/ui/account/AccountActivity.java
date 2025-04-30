@@ -43,7 +43,7 @@ public class AccountActivity extends AppCompatActivity {
         userEmail = findViewById(R.id.userEmail);
 
 
-        FirebaseDatabase database = FirebaseDatabase.getInstance("https://corpconnect-fdf1b-default-rtdb.europe-west1.firebasedatabase.app");
+        FirebaseDatabase database = FirebaseDatabase.getInstance(HomeActivity.linkDatabase);
         userDatabaseRef = database.getReference("users");
 
         loadUserData();
