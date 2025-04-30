@@ -61,16 +61,15 @@
                     android:textColor="@color/text_secondary"
                     android:textSize="14sp" />
 
-                <TextView
-                    android:id="@+id/newsDateDetail"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:text="12.04.2025"
-                    android:textColor="@color/text_secondary"
-                    android:textSize="14sp" />
-            </LinearLayout>
 
+            </LinearLayout>
+            <TextView
+                android:id="@+id/newsDateDetail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="12.04.2025"
+                android:textColor="@color/text_secondary"
+                android:textSize="14sp" />
             <Button
                 android:id="@+id/deleteNewsButton"
                 android:layout_width="match_parent"

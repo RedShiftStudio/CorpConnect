@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
 import android.view.MenuItem;
-import android.widget.Button;
+
 import androidx.appcompat.widget.SearchView;
 
 import androidx.annotation.NonNull;
@@ -38,18 +38,16 @@ import java.util.List;
 
 public class HomeActivity extends AppCompatActivity {
 
-    private RecyclerView recyclerView;
     private NewsAdapter newsAdapter;
     private List<News> newsList = new ArrayList<>();
-    private SearchView searchView;
     private DatabaseReference newsRef;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        recyclerView = findViewById(R.id.newsRecyclerView);
-        searchView = findViewById(R.id.searchView);
+        RecyclerView recyclerView = findViewById(R.id.newsRecyclerView);
+        SearchView searchView = findViewById(R.id.searchView);
         FloatingActionButton fabAddNews = findViewById(R.id.fabAddNews);
 
         setupBanner();

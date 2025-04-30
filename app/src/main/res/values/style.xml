@@ -49,4 +49,27 @@
         <item name="android:textColorHint">@color/text_secondary</item>
     </style>
 
+    <!-- Стиль для входящих сообщений -->
+    <style name="IncomingMessageStyle">
+        <item name="android:background">@drawable/bg_message_incoming</item>
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:paddingStart">12dp</item>
+        <item name="android:paddingEnd">12dp</item>
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:paddingBottom">8dp</item>
+    </style>
+
+    <!-- Стиль для исходящих сообщений -->
+    <style name="OutgoingMessageStyle">
+        <item name="android:background">@drawable/bg_message_outgoing</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:paddingStart">12dp</item>
+        <item name="android:paddingEnd">12dp</item>
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:paddingBottom">8dp</item>
+    </style>
+
+
 </resources>

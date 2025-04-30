@@ -81,7 +81,7 @@ public class RegisterActivity extends AppCompatActivity {
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
                             String userId = Objects.requireNonNull(mAuth.getCurrentUser()).getUid();
-                            saveUserToDatabase(userId, email, name, "user", position, surname, department);
+                            saveUserToDatabase(userId, email, name, position, surname, department);
                         } else {
                             String error = task.getException() != null ? task.getException().getMessage() : "Неизвестная ошибка";
                             Toast.makeText(this, "Ошибка: " + error, Toast.LENGTH_LONG).show();
@@ -95,9 +95,9 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
-    private void saveUserToDatabase(String userId, String email, String name, String role, String position, String surname, String department) {
+    private void saveUserToDatabase(String userId, String email, String name, String position, String surname, String department) {
+        User user = new User(userId, email, name, surname, "user", position, department);
 
-        User user = new User(email, name, surname, role, position, department);
         databaseReference.child(userId).setValue(user).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 Toast.makeText(this, "Регистрация успешна", Toast.LENGTH_SHORT).show();
@@ -106,8 +106,9 @@ public class RegisterActivity extends AppCompatActivity {
             } else {
                 String error = task.getException() != null ? task.getException().getMessage() : "Ошибка сохранения данных";
                 Log.e("RegisterActivity", "Ошибка при записи в базу: " + error);
-                Toast.makeText(this, error, Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Ошибка при записи в базу: " + error, Toast.LENGTH_SHORT).show();
             }
         });
     }
+
 }

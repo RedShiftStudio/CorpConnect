@@ -27,7 +27,7 @@
             android:text="Время"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
-            android:layout_marginRight="4dp"/>
+            android:layout_marginEnd="4dp"/>
 
         <TextView
             android:id="@+id/notificationText"

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 
 import androidx.annotation.NonNull;
@@ -18,9 +19,16 @@ import com.company.corpconnect.model.Notification;
 import com.company.corpconnect.ui.home.HomeActivity;
 import com.company.corpconnect.ui.interaction.ChatsActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class NotificationsActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
@@ -39,9 +47,13 @@ public class NotificationsActivity extends AppCompatActivity {
         adapter = new NotificationAdapter(notifications);
         recyclerView.setAdapter(adapter);
 
-        // Загрузка уведомлений
-        loadNotifications();
+        markAllReadButton.setOnClickListener(v -> markAllNotificationsAsRead());
 
+        setupBottomNavigation();
+        loadNotificationsFromFirebase();
+    }
+
+    private void setupBottomNavigation() {
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
         bottomNavigationView.setOnItemSelectedListener(new BottomNavigationView.OnItemSelectedListener() {
             @SuppressLint("NonConstantResourceId")
@@ -65,9 +77,60 @@ public class NotificationsActivity extends AppCompatActivity {
         });
     }
 
-    private void loadNotifications() {
-        notifications.add(new Notification("Новость", "Это пример уведомления", "10:30", false));
-        notifications.add(new Notification("Сообщение", "Сообщение от пользователя", "10:45", true));
+    private void loadNotificationsFromFirebase() {
+        DatabaseReference notificationRef = FirebaseDatabase.getInstance(
+                "https://corpconnect-fdf1b-default-rtdb.europe-west1.firebasedatabase.app"
+        ).getReference("notifications");
+
+        notificationRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                notifications.clear();
+                for (DataSnapshot data : snapshot.getChildren()) {
+                    Notification notification = data.getValue(Notification.class);
+                    if (notification != null) {
+                        notifications.add(notification);
+                    }
+                }
+                updateUI();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Обработка ошибок (логирование или отображение сообщения)
+            }
+        });
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private void updateUI() {
+        if (notifications.isEmpty()) {
+            recyclerView.setVisibility(View.GONE);
+        } else {
+            recyclerView.setVisibility(View.VISIBLE);
+        }
         adapter.notifyDataSetChanged();
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private void markAllNotificationsAsRead() {
+        DatabaseReference notificationRef = FirebaseDatabase.getInstance(
+                "https://corpconnect-fdf1b-default-rtdb.europe-west1.firebasedatabase.app"
+        ).getReference("notifications");
+
+        Map<String, Object> updates = new HashMap<>();
+        for (Notification notification : notifications) {
+            if (!notification.isRead()) {
+                notification.setRead(true);
+                updates.put(notification.getId() + "/isRead", true);
+            }
+        }
+
+        notificationRef.updateChildren(updates).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                adapter.notifyDataSetChanged();
+            } else {
+            }
+        });
     }
 }

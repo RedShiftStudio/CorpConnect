@@ -10,7 +10,6 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -20,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.company.corpconnect.R;
 import com.company.corpconnect.model.News;
+import com.company.corpconnect.model.Notification;
 import com.company.corpconnect.ui.account.AccountActivity;
 import com.company.corpconnect.ui.account.NotificationsActivity;
 import com.company.corpconnect.ui.home.HomeActivity;
@@ -42,7 +42,7 @@ public class AddNewsActivity extends AppCompatActivity {
     private TextInputEditText titleEditText, descriptionEditText, authorEditText;
     private ImageView ivImagePreview;
     private Uri imageUri;
-    private DatabaseReference newsRef;
+    private DatabaseReference newsRef, notificationsRef;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -58,6 +58,7 @@ public class AddNewsActivity extends AppCompatActivity {
 
         FirebaseDatabase database = FirebaseDatabase.getInstance("https://corpconnect-fdf1b-default-rtdb.europe-west1.firebasedatabase.app");
         newsRef = database.getReference("news");
+        notificationsRef = database.getReference("notifications");
 
         btnChooseImage.setOnClickListener(v -> openFileChooser());
         btnAddNews.setOnClickListener(v -> addNews());
@@ -144,29 +145,33 @@ public class AddNewsActivity extends AppCompatActivity {
             return;
         }
 
-        if (imageUri != null) {
-            new Thread(() -> {
-                try {
+        new Thread(() -> {
+            try {
+                String imagePath;
+
+                if (imageUri != null) {
                     Bitmap originalBitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imageUri);
                     Bitmap scaledBitmap = scaleBitmap(originalBitmap);
-
                     String fileName = System.currentTimeMillis() + ".jpg";
-                    String imagePath = saveImageToInternalStorage(scaledBitmap, fileName);
+                    imagePath = saveImageToInternalStorage(scaledBitmap, fileName);
 
-                    if (imagePath != null) {
-                        String date = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(new Date());
-                        runOnUiThread(() -> addNewsToDatabase(title, description, author, imagePath, date));
-                    } else {
+                    if (imagePath == null) {
                         runOnUiThread(() -> Toast.makeText(this, "Не удалось сохранить изображение локально", Toast.LENGTH_SHORT).show());
+                        return;
                     }
-                } catch (IOException e) {
-                    Log.e("AddNewsActivity", "Ошибка обработки изображения: " + e.getMessage(), e);
+                } else {
+                    imagePath = "";
                 }
-            }).start();
-        } else {
-            Toast.makeText(this, "Изображение не выбрано", Toast.LENGTH_SHORT).show();
-        }
+
+                String date = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(new Date());
+                runOnUiThread(() -> addNewsToDatabase(title, description, author, imagePath, date));
+            } catch (IOException e) {
+                Log.e("AddNewsActivity", "Ошибка обработки изображения: " + e.getMessage(), e);
+            }
+        }).start();
     }
+
+
 
     private String saveImageToInternalStorage(Bitmap bitmap, String fileName) {
         File directory = new File(getFilesDir(), "local_images");
@@ -193,6 +198,7 @@ public class AddNewsActivity extends AppCompatActivity {
 
             newsRef.child(newsId).setValue(news)
                     .addOnSuccessListener(aVoid -> {
+                        addNotificationForNewNews(newsId, title);
                         startActivity(new Intent(AddNewsActivity.this, HomeActivity.class));
                         Toast.makeText(this, "Новость успешно добавлена", Toast.LENGTH_SHORT).show();
                         finish();
@@ -204,4 +210,21 @@ public class AddNewsActivity extends AppCompatActivity {
             Toast.makeText(this, "Ошибка генерации ID новости", Toast.LENGTH_SHORT).show();
         }
     }
+    private void addNotificationForNewNews(String newsId, String title) {
+        String notificationId = notificationsRef.push().getKey();
+
+        if (notificationId != null) {
+            String notificationMessage = "Добавлена новая новость: " + title;
+            Notification notification = new Notification(notificationId, "Новость", notificationMessage, new SimpleDateFormat("HH:mm", Locale.getDefault()).format(new Date()), false);
+
+            notificationsRef.child(notificationId).setValue(notification)
+                    .addOnSuccessListener(aVoid -> {
+                        Log.d("AddNewsActivity", "Уведомление успешно добавлено");
+                    })
+                    .addOnFailureListener(e -> {
+                        Log.e("AddNewsActivity", "Ошибка добавления уведомления: " + e.getMessage(), e);
+                    });
+        }
+    }
+
 }

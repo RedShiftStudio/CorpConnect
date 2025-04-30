@@ -11,12 +11,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.company.corpconnect.R;
 import com.company.corpconnect.model.Notification;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.List;
 
 public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapter.ViewHolder> {
-
-    private final List<Notification> notifications;
+    private List<Notification> notifications;
 
     public NotificationAdapter(List<Notification> notifications) {
         this.notifications = notifications;
@@ -32,10 +33,21 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Notification notification = notifications.get(position);
-        holder.type.setText(notification.getType());
-        holder.text.setText(notification.getText());
-        holder.time.setText(notification.getTime());
-        holder.readIndicator.setImageResource(notification.isRead() ? R.drawable.ic_read : R.drawable.ic_unread);
+        holder.notificationType.setText(notification.getType());
+        holder.notificationText.setText(notification.getText());
+        holder.notificationTime.setText(notification.getTime());
+
+        holder.readIndicator.setImageResource(
+                notification.isRead() ? R.drawable.ic_read : R.drawable.ic_unread
+        );
+
+        holder.itemView.setOnClickListener(v -> {
+            if (!notification.isRead()) {
+                notification.setRead(true);
+                notifyItemChanged(position);
+                updateNotificationState(notification);
+            }
+        });
     }
 
     @Override
@@ -43,15 +55,24 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         return notifications.size();
     }
 
-    static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView type, text, time;
+    private void updateNotificationState(Notification notification) {
+        DatabaseReference notificationRef = FirebaseDatabase.getInstance(
+                "https://corpconnect-fdf1b-default-rtdb.europe-west1.firebasedatabase.app"
+        ).getReference("notifications").child(notification.getId());
+        notificationRef.child("isRead").setValue(true);
+    }
+
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        TextView notificationType;
+        TextView notificationText;
+        TextView notificationTime;
         ImageView readIndicator;
 
-        ViewHolder(@NonNull View itemView) {
+        public ViewHolder(View itemView) {
             super(itemView);
-            type = itemView.findViewById(R.id.notificationType);
-            text = itemView.findViewById(R.id.notificationText);
-            time = itemView.findViewById(R.id.notificationTime);
+            notificationType = itemView.findViewById(R.id.notificationType);
+            notificationText = itemView.findViewById(R.id.notificationText);
+            notificationTime = itemView.findViewById(R.id.notificationTime);
             readIndicator = itemView.findViewById(R.id.readIndicator);
         }
     }

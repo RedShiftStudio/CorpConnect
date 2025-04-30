@@ -50,6 +50,12 @@
         <activity
             android:name=".ui.account.EditProfileActivity"
             android:exported="true" />
+        <activity
+            android:name=".ui.interaction.ChatActivity"
+            android:exported="true" />
+        <activity
+            android:name=".ui.account.UserProfileActivity"
+            android:exported="true" />
     </application>
 
 </manifest>
